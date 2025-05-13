@@ -1,0 +1,15 @@
+body {
+    padding: 30px;
+}
+
+main {
+    padding-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
