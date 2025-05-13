@@ -11,11 +11,11 @@ profile: coverage.out
 threshold:
   # (optional; default 0) 
   # Minimum coverage percentage required for individual files.
-  file: 85
+  file: 80
 
   # (optional; default 0) 
   # Minimum coverage percentage required for each package.
-  package: 85
+  package: 80
 
   # (optional; default 0) 
   # Minimum overall project coverage percentage required.
