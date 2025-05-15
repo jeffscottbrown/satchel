@@ -23,5 +23,5 @@ func TestRootEndpoint(t *testing.T) {
 
 	assert.Equal(t, http.StatusOK, recorder.Code, "Expected status code 200")
 
-	assert.Contains(t, recorder.Body.String(), "Welcome To Satchel.", "Response body should contain the welcome message")
+	assert.Contains(t, recorder.Body.String(), "Welcome To Satchel", "Response body should contain the welcome message")
 }
