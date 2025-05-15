@@ -7,8 +7,7 @@ COPY go.mod go.sum ./
 
 RUN go mod download
 
-COPY main.go .
-COPY server/ server/
+COPY . .
 
 ENV CGO_ENABLED=1
 RUN go build -o satchel .

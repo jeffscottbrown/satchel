@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/jeffscottbrown/satchel/yaml"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -23,5 +24,5 @@ func TestRootEndpoint(t *testing.T) {
 
 	assert.Equal(t, http.StatusOK, recorder.Code, "Expected status code 200")
 
-	assert.Contains(t, recorder.Body.String(), "Welcome To Satchel", "Response body should contain the welcome message")
+	assert.Contains(t, recorder.Body.String(), "<title>Satchel</title>", "Page title should be 'Satchel'")
 }

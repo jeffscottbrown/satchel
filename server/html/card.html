@@ -1,0 +1,18 @@
+{{ define "card" }}
+<div class="employee-card">
+  <div class="card-header">
+    <img src="/static/images/{{ .Employee.ImageName }}" alt="Employee Photo" class="employee-photo" />
+    <h2 class="employee-name">{{ .Employee.Name }}</h2>
+    <p class="employee-position">{{ .Employee.Position }}</p>
+  </div>
+  <div class="card-stats">
+
+    {{ range $key, $value := .Employee.Scores }}
+      <div class="stat">
+        <span class="label">{{ $key }}:</span>
+        <span class="value">{{ $value }}</span>
+      </div>
+    {{ end }}
+  </div>
+</div>
+{{end}}

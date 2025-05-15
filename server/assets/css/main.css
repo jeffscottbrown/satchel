@@ -13,3 +13,11 @@ main {
     bottom: 0;
     width: 100%;
 }
+
+a.app-link {
+    text-decoration: none;
+}
+a.app-link:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}

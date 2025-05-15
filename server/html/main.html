@@ -1,9 +1,19 @@
 {{ define "main" }}
 <div class="container" id="home" style="width: 75%;">
     <div class="d-flex justify-content-center align-items-center">
-        <blockquote class="blockquote" style="text-align: center; height: auto;">
-            Welcome To Satchel
-        </blockquote>
+        <table class="table table-striped table-bordered ">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ range .Employees }}
+                <tr>
+                    <td><a class="app-link" hx-push-url="true" hx-target="#main" hx-get="/employee/{{ .Name }}"> {{ .Name }}</a></td>
+                </tr>
+                {{ end }}
+            </tbody>
     </div>
 </div>
 {{end}}

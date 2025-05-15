@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jeffscottbrown/satchel/repository"
 )
 
 //go:embed assets/**
@@ -34,10 +35,30 @@ func configureRoutes(router *gin.Engine) {
 	tmpl = template.Must(template.New("").Funcs(router.FuncMap).ParseFS(embeddedHTMLFiles, "html/*.html"))
 
 	router.GET("/", renderRoot)
+	router.GET("/employee/:employeeName", renderEmployee)
 }
 
 func renderRoot(c *gin.Context) {
-	renderTemplate(c, "main", gin.H{})
+	employees, err := repository.GetEmployees()
+	if err != nil {
+		c.String(http.StatusInternalServerError, "Error retrieving employees: %v", err)
+		return
+	}
+	renderTemplate(c, "main", gin.H{
+		"Employees": employees,
+	})
+}
+
+func renderEmployee(c *gin.Context) {
+	employeeName := c.Param("employeeName")
+	employee, err := repository.GetEmployeeByName(employeeName)
+	if err != nil {
+		c.String(http.StatusInternalServerError, "Error retrieving employee: %v", err)
+		return
+	}
+	renderTemplate(c, "card", gin.H{
+		"Employee": employee,
+	})
 }
 
 var tmpl *template.Template
