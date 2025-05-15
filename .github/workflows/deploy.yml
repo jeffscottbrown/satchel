@@ -2,7 +2,6 @@ name: Build and Deploy to Google Cloud Run
 
 on:
   push:
-    branches: [ main ]
     tags:
       - 'v*'
 
@@ -25,12 +24,14 @@ jobs:
         username: _json_key
         password: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
-    - name: Build and Push Docker Image
-      run: |
-        docker buildx build \
-          --platform linux/amd64 \
-          --push \
-          -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/satchel:latest .
+
+
+    - name: Build and push
+      uses: docker/build-push-action@v6
+      with:
+        push: true
+        platforms: linux/amd64
+        tags: gcr.io/${{ secrets.GCP_PROJECT_ID }}/satchel:latest
 
     - name: Set up gcloud CLI
       uses: google-github-actions/setup-gcloud@v1
