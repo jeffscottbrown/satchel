@@ -8,12 +8,6 @@ main {
     flex-direction: column;
 }
 
-.footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-}
-
 a.app-link {
     text-decoration: none;
 }
