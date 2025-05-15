@@ -13,3 +13,10 @@
     Social: 2
     Contemplative: 10
     Favorite Place: Walden Pond
+- name: Satchel Paige
+  position: Pitcher
+  image: satchel.png
+  scores:
+    ERA: 2.74
+    Games: 400
+    Strikeouts: 1,487
