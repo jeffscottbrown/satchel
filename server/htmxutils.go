@@ -24,8 +24,8 @@ func renderTemplateWithStatus(c *gin.Context, templateName string, data gin.H, s
 	}
 }
 
-func renderUnauthorized(c *gin.Context, data gin.H) {
-	renderTemplateWithStatus(c, "unauthorized", data, http.StatusUnauthorized)
+func renderForbidden(c *gin.Context, data gin.H) {
+	renderTemplateWithStatus(c, "forbidden", data, http.StatusForbidden)
 }
 
 // func renderBadRequest(c *gin.Context, data gin.H) {

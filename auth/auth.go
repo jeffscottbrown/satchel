@@ -52,7 +52,8 @@ func authCallback(c *gin.Context) {
 	}
 
 	if !isAllowedDomain(user.Email) {
-		c.Redirect(http.StatusFound, "/unauthorized")
+		gothic.Logout(res, req)
+		c.Redirect(http.StatusFound, "/forbidden")
 		return
 	}
 	slog.Info("User authenticated", "name", user.Name)

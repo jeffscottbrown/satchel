@@ -38,12 +38,12 @@ func configureRoutes(router *gin.Engine) {
 
 	router.GET("/", rootHandler)
 	router.GET("/employee/:employeeName", auth.AuthRequired, employeeHandler)
-	router.GET("/unauthorized", unauthorizedHandler)
+	router.GET("/forbidden", forbiddenHandler)
 	auth.ConfigureAuthorizationHandlers(router)
 }
 
-func unauthorizedHandler(c *gin.Context) {
-	renderUnauthorized(c, gin.H{})
+func forbiddenHandler(c *gin.Context) {
+	renderForbidden(c, gin.H{})
 }
 
 func rootHandler(c *gin.Context) {
