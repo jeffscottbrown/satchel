@@ -7,7 +7,9 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jeffscottbrown/satchel/auth"
 	"github.com/jeffscottbrown/satchel/repository"
+	"github.com/markbates/goth/gothic"
 )
 
 //go:embed assets/**
@@ -34,22 +36,30 @@ func configureRoutes(router *gin.Engine) {
 
 	tmpl = template.Must(template.New("").Funcs(router.FuncMap).ParseFS(embeddedHTMLFiles, "html/*.html"))
 
-	router.GET("/", renderRoot)
-	router.GET("/employee/:employeeName", renderEmployee)
+	router.GET("/", rootHandler)
+	router.GET("/employee/:employeeName", auth.AuthRequired, employeeHandler)
+	router.GET("/unauthorized", unauthorizedHandler)
+	auth.ConfigureAuthorizationHandlers(router)
 }
 
-func renderRoot(c *gin.Context) {
+func unauthorizedHandler(c *gin.Context) {
+	renderUnauthorized(c, gin.H{})
+}
+
+func rootHandler(c *gin.Context) {
 	employees, err := repository.GetEmployees()
 	if err != nil {
 		c.String(http.StatusInternalServerError, "Error retrieving employees: %v", err)
 		return
 	}
+	user, _ := gothic.GetFromSession("authenticatedUser", c.Request)
 	renderTemplate(c, "main", gin.H{
-		"Employees": employees,
+		"Employees":         employees,
+		"AuthenticatedUser": user,
 	})
 }
 
-func renderEmployee(c *gin.Context) {
+func employeeHandler(c *gin.Context) {
 	employeeName := c.Param("employeeName")
 	employee, err := repository.GetEmployeeByName(employeeName)
 	if err != nil {

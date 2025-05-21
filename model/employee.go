@@ -1,13 +1,16 @@
 package model
 
-import "sync"
+import (
+	"sync"
+)
 
 type Employee struct {
+	ID        uint           `gorm:"primaryKey"`
 	Name      string         `yaml:"name"`
 	Position  string         `yaml:"position"`
-	Scores    map[string]any `yaml:"scores"`
+	Scores    map[string]any `yaml:"scores" gorm:"type:jsonb"`
 	ImageName string         `yaml:"image"`
-	mu        sync.Mutex
+	mu        sync.Mutex     `gorm:"-"`
 }
 
 func (e *Employee) AddScore(scoreName string, value any) {

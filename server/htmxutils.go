@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jeffscottbrown/satchel/auth"
 )
 
 func renderTemplateWithStatus(c *gin.Context, templateName string, data gin.H, status int) {
@@ -13,13 +14,18 @@ func renderTemplateWithStatus(c *gin.Context, templateName string, data gin.H, s
 
 	isHTMX := x != ""
 
+	data["IsAuthenticated"] = auth.IsAuthenticated(c.Request)
+
 	if isHTMX {
 		tmpl.ExecuteTemplate(c.Writer, templateName, data)
 	} else {
-		tmpl.ExecuteTemplate(c.Writer, "layout", gin.H{
-			"Body": template.HTML(renderTemplateToString(templateName, data)),
-		})
+		data["Body"] = template.HTML(renderTemplateToString(templateName, data))
+		tmpl.ExecuteTemplate(c.Writer, "layout", data)
 	}
+}
+
+func renderUnauthorized(c *gin.Context, data gin.H) {
+	renderTemplateWithStatus(c, "unauthorized", data, http.StatusUnauthorized)
 }
 
 // func renderBadRequest(c *gin.Context, data gin.H) {

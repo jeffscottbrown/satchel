@@ -1,4 +1,9 @@
 {{ define "main" }}
+
+<span class="navbar-text">
+    Welcome, {{ .AuthenticatedUser }}!
+</span>
+
 <div class="container" id="home" style="width: 75%;">
     <div class="d-flex justify-content-center align-items-center">
         <table class="table table-striped table-bordered ">
@@ -16,4 +21,5 @@
             </tbody>
     </div>
 </div>
-{{end}}
+
+{{ end }}
