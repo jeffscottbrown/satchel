@@ -12,7 +12,7 @@ func TestGetEmployees(t *testing.T) {
 	repo := &YamlEmployeeRepository{}
 	employees, err := repo.GetEmployees()
 	assert.NoError(t, err, "expected no error when getting employees")
-	assert.Len(t, employees, 2, "expected 2 employees")
+	assert.Len(t, employees, 3, "expected 3 employees")
 
 	var henry *model.Employee
 	for _, e := range employees {
