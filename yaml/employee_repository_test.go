@@ -24,3 +24,17 @@ func TestGetEmployees(t *testing.T) {
 	assert.NotNil(t, henry, "expected to find employee Henry Thoreau")
 	assert.Equal(t, 10, henry.Scores["Contemplative"], "expected Henry Thoreau to have a Contemplative score of 10")
 }
+
+func TestGetEmployeeByName_Found(t *testing.T) {
+	repo := &YamlEmployeeRepository{}
+	employee, err := repo.GetEmployeeByName("Henry David Thoreau")
+	assert.NoError(t, err, "expected no error when getting employee by name")
+	assert.NotNil(t, employee, "expected to find employee Henry Thoreau")
+	assert.Equal(t, "Henry David Thoreau", employee.Name, "expected employee name to be Henry David Thoreau")
+}
+func TestGetEmployeeByName_NotFound(t *testing.T) {
+	repo := &YamlEmployeeRepository{}
+	employee, err := repo.GetEmployeeByName("Nonexistent Employee")
+	assert.NoError(t, err, "expected no error when getting employee by name")
+	assert.Nil(t, employee, "expected to not find employee Nonexistent Employee")
+}
