@@ -1,7 +1,6 @@
 package repository
 
 import (
-	_ "embed"
 	"errors"
 
 	"github.com/jeffscottbrown/satchel/model"
@@ -15,6 +14,7 @@ func SetRepository(r EmployeeRepository) {
 
 type EmployeeRepository interface {
 	GetEmployees() ([]model.Employee, error)
+	GetEmployeeByName(string) (model.Employee, error)
 }
 
 func GetEmployees() ([]model.Employee, error) {

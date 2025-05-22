@@ -2,14 +2,16 @@ package server
 
 import (
 	"embed"
-	"html/template"
 	"io/fs"
+
+	"github.com/jeffscottbrown/satchel/repository"
+	"github.com/markbates/goth/gothic"
+
+	"html/template"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jeffscottbrown/satchel/auth"
-	"github.com/jeffscottbrown/satchel/repository"
-	"github.com/markbates/goth/gothic"
 )
 
 //go:embed assets/**
@@ -30,11 +32,13 @@ func createRouter() *gin.Engine {
 	return router
 }
 
+func init() {
+	tmpl = template.Must(template.New("").ParseFS(embeddedHTMLFiles, "html/*.html"))
+}
+
 func configureRoutes(router *gin.Engine) {
 	staticFiles, _ := fs.Sub(embeddedAssets, "assets")
 	router.StaticFS("/static", http.FS(staticFiles))
-
-	tmpl = template.Must(template.New("").Funcs(router.FuncMap).ParseFS(embeddedHTMLFiles, "html/*.html"))
 
 	router.GET("/", rootHandler)
 	router.GET("/employee/:employeeName", auth.AuthRequired, employeeHandler)

@@ -8,13 +8,14 @@ import (
 )
 
 func TestRenderTemplateToString(t *testing.T) {
-	tmpl = template.Must(template.New("test").Parse(`
+
+	testTemplate := template.Must(template.New("test").Parse(`
 		{{define "example"}}Hello, {{.Name}}!{{end}}
 	`))
 
 	data := map[string]string{"Name": "World"}
 
-	result := renderTemplateToString("example", data)
+	result := renderTemplateToString("example", data, testTemplate)
 
 	expected := "Hello, World!"
 	assert.Equal(t, expected, result, "The rendered template string should match the expected output")

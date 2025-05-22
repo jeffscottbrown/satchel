@@ -19,7 +19,7 @@ func renderTemplateWithStatus(c *gin.Context, templateName string, data gin.H, s
 	if isHTMX {
 		tmpl.ExecuteTemplate(c.Writer, templateName, data)
 	} else {
-		data["Body"] = template.HTML(renderTemplateToString(templateName, data))
+		data["Body"] = template.HTML(renderTemplateToString(templateName, data, tmpl))
 		tmpl.ExecuteTemplate(c.Writer, "layout", data)
 	}
 }
@@ -40,10 +40,10 @@ func renderTemplate(c *gin.Context, templateName string, data gin.H) {
 	renderTemplateWithStatus(c, templateName, data, http.StatusOK)
 }
 
-func renderTemplateToString(name string, data any) string {
+func renderTemplateToString(name string, data any, htmlTemplate *template.Template) string {
 	var buf []byte
 	writer := &buffer{&buf}
-	_ = tmpl.ExecuteTemplate(writer, name, data)
+	_ = htmlTemplate.ExecuteTemplate(writer, name, data)
 	return string(*writer.buf)
 }
 
