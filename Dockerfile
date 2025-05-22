@@ -16,6 +16,9 @@ FROM alpine:latest
 
 ENV GIN_MODE=release
 
+ARG PROJECT_ID
+ENV PROJECT_ID=$PROJECT_ID
+
 WORKDIR /app
 
 COPY --from=appbuilder /build/satchel ./
