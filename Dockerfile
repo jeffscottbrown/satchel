@@ -10,7 +10,7 @@ RUN go mod download
 COPY . .
 
 ENV CGO_ENABLED=1
-RUN go build -o satchel .
+RUN go build -tags=production -o satchel .
 
 FROM alpine:latest
 
