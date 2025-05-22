@@ -74,6 +74,8 @@ func init() {
 		slog.Warn("Problem loading .env file", "error", err)
 	}
 
+	slog.Debug("GID: %s", "ID", os.Getenv("GOOGLE_ID"))
+	slog.Debug("PID: %s", "ID", os.Getenv("PROJECT_ID"))
 	gothic.Store = sessions.NewCookieStore([]byte(uuid.NewString()))
 	slog.Debug("Configuring authentication providers")
 
