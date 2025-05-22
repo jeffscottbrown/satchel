@@ -21,19 +21,6 @@ func (r *YamlEmployeeRepository) GetEmployees() ([]model.Employee, error) {
 	return employees, nil
 }
 
-func (r *YamlEmployeeRepository) GetEmployeeByName(name string) (*model.Employee, error) {
-	employees, err := r.GetEmployees()
-	if err != nil {
-		return nil, err
-	}
-	for _, employee := range employees {
-		if employee.Name == name {
-			return &employee, nil
-		}
-	}
-	return nil, nil
-}
-
 func init() {
 	repository.SetRepository(&YamlEmployeeRepository{})
 }

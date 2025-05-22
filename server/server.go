@@ -29,13 +29,12 @@ func createRouter() *gin.Engine {
 	configureRoutes(router)
 	return router
 }
-func init() {
-	tmpl = template.Must(template.New("").ParseFS(embeddedHTMLFiles, "html/*.html"))
-}
 
 func configureRoutes(router *gin.Engine) {
 	staticFiles, _ := fs.Sub(embeddedAssets, "assets")
 	router.StaticFS("/static", http.FS(staticFiles))
+
+	tmpl = template.Must(template.New("").Funcs(router.FuncMap).ParseFS(embeddedHTMLFiles, "html/*.html"))
 
 	router.GET("/", rootHandler)
 	router.GET("/employee/:employeeName", auth.AuthRequired, employeeHandler)

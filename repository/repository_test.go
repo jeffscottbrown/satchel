@@ -18,18 +18,9 @@ func (m *mockEmployeeRepository) GetEmployees() ([]model.Employee, error) {
 	return m.employees, m.err
 }
 
-func (m *mockEmployeeRepository) GetEmployeeByName(name string) (*model.Employee, error) {
-	for _, employee := range m.employees {
-		if employee.Name == name {
-			return &employee, nil
-		}
-	}
-	return nil, errors.New("employee not found")
-}
-
 func TestGetEmployees_RepositoryNotInitialized(t *testing.T) {
 	// Ensure repository is not initialized
-	ConfigureRepositoryForTest(t, nil)
+	employeeRepository = nil
 
 	employees, err := GetEmployees()
 	assert.Nil(t, employees)
@@ -46,7 +37,7 @@ func TestGetEmployees_RepositoryInitialized(t *testing.T) {
 		employees: mockEmployees,
 		err:       nil,
 	}
-	ConfigureRepositoryForTest(t, mockRepo)
+	SetRepository(mockRepo)
 
 	employees, err := GetEmployees()
 	assert.NoError(t, err)
@@ -58,14 +49,13 @@ func TestGetEmployees_RepositoryReturnsError(t *testing.T) {
 		employees: nil,
 		err:       errors.New("database error"),
 	}
-	ConfigureRepositoryForTest(t, mockRepo)
+	SetRepository(mockRepo)
 
 	employees, err := GetEmployees()
 	assert.Nil(t, employees)
 	assert.Error(t, err)
 	assert.EqualError(t, err, "database error")
 }
-
 func TestGetEmployeeByName_Found(t *testing.T) {
 	mockEmployees := []model.Employee{
 		{Name: "Alice"},
@@ -75,7 +65,7 @@ func TestGetEmployeeByName_Found(t *testing.T) {
 		employees: mockEmployees,
 		err:       nil,
 	}
-	ConfigureRepositoryForTest(t, mockRepo)
+	SetRepository(mockRepo)
 
 	employee, err := GetEmployeeByName("Bob")
 	assert.NoError(t, err)
@@ -92,7 +82,7 @@ func TestGetEmployeeByName_NotFound(t *testing.T) {
 		employees: mockEmployees,
 		err:       nil,
 	}
-	ConfigureRepositoryForTest(t, mockRepo)
+	SetRepository(mockRepo)
 
 	employee, err := GetEmployeeByName("Charlie")
 	assert.Nil(t, employee)
@@ -101,7 +91,7 @@ func TestGetEmployeeByName_NotFound(t *testing.T) {
 }
 
 func TestGetEmployeeByName_RepositoryNotInitialized(t *testing.T) {
-	ConfigureRepositoryForTest(t, nil)
+	employeeRepository = nil
 
 	employee, err := GetEmployeeByName("Alice")
 	assert.Nil(t, employee)
@@ -114,7 +104,7 @@ func TestGetEmployeeByName_RepositoryReturnsError(t *testing.T) {
 		employees: nil,
 		err:       errors.New("database error"),
 	}
-	ConfigureRepositoryForTest(t, mockRepo)
+	SetRepository(mockRepo)
 
 	employee, err := GetEmployeeByName("Alice")
 	assert.Nil(t, employee)

@@ -5,7 +5,6 @@ go 1.24.3
 tool github.com/air-verse/air
 
 require (
-	github.com/PuerkitoBio/goquery v1.10.3
 	github.com/gin-gonic/gin v1.10.1
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/sessions v1.4.0
@@ -24,7 +23,6 @@ require (
 	cloud.google.com/go/secretmanager v1.14.7 // indirect
 	dario.cat/mergo v1.0.2 // indirect
 	github.com/air-verse/air v1.61.7 // indirect
-	github.com/andybalholm/cascadia v1.3.3 // indirect
 	github.com/bep/godartsass/v2 v2.5.0 // indirect
 	github.com/bep/golibsass v1.2.0 // indirect
 	github.com/bytedance/sonic v1.13.2 // indirect
