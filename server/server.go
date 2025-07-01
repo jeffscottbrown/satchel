@@ -11,7 +11,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jeffscottbrown/satchel/auth"
 )
 
 //go:embed assets/**
@@ -41,9 +40,7 @@ func configureRoutes(router *gin.Engine) {
 	router.StaticFS("/static", http.FS(staticFiles))
 
 	router.GET("/", rootHandler)
-	router.GET("/employee/:employeeName", auth.AuthRequired, employeeHandler)
-	router.GET("/forbidden", forbiddenHandler)
-	auth.ConfigureAuthorizationHandlers(router)
+	router.GET("/employee/:employeeName", employeeHandler)
 }
 
 func forbiddenHandler(c *gin.Context) {
