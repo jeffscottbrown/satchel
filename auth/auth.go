@@ -107,7 +107,7 @@ func createOauthConfig(provider string) *oauthConfig {
 func retrieveSecretValue(secretName string) string {
 	clientSecret, err := secrets.RetrieveSecret(secretName)
 	if err != nil {
-		slog.Warn("Falling back to OS environment variable", "variable", secretName)
+		slog.Warn("Falling back to OS environment variable", slog.String("secretName", secretName), slog.Any("error", err))
 		clientSecret = os.Getenv(secretName)
 	}
 
