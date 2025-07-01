@@ -88,9 +88,9 @@ func createOauthConfig(provider string) *oauthConfig {
 	providerUpperCase := strings.ToUpper(provider)
 	providerLowerCase := strings.ToLower(provider)
 
-	callbackUrlVarName := providerUpperCase + "_CALLBACK_URL"
-	idVarName := providerUpperCase + "_ID"
-	secretVarName := providerUpperCase + "_SECRET"
+	callbackUrlVarName := providerUpperCase + "_OAUTH_CALLBACK_URL"
+	idVarName := providerUpperCase + "_OAUTH_CLIENT_ID"
+	secretVarName := providerUpperCase + "_OAUTH_CLIENT_SECRET"
 
 	callbackUrl := retrieveSecretValue(callbackUrlVarName)
 	if callbackUrl == "" {
