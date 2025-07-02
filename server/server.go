@@ -70,7 +70,7 @@ func employeeHandler(c *gin.Context) {
 		c.String(http.StatusInternalServerError, "Error retrieving employee: %v", err)
 		return
 	}
-	renderTemplate(c, "card", gin.H{
+	renderTemplate(c, "person", gin.H{
 		"Employee": employee,
 	})
 }

@@ -1,0 +1,83 @@
+{{ define "knowyou" }}
+<div class="card-feedback mt-4">
+  <form class="p-3 border rounded bg-light" onsubmit="event.preventDefault(); alert('Not Yet Implemented -Thank You For Looking');">
+    <h5 class="mb-3">The Team Wants To Know You</h5>
+    <div class="mb-3">
+      <label class="form-label">Question 1: Communication Skills</label>
+      <div class="star-rating" data-question="q1">
+        <input type="hidden" name="q1" value="0">
+        <span class="star" data-value="1">&#9733;</span>
+        <span class="star" data-value="2">&#9733;</span>
+        <span class="star" data-value="3">&#9733;</span>
+        <span class="star" data-value="4">&#9733;</span>
+        <span class="star" data-value="5">&#9733;</span>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Question 2: Teamwork</label>
+      <div class="star-rating" data-question="q2">
+        <input type="hidden" name="q2" value="0">
+        <span class="star" data-value="1">&#9733;</span>
+        <span class="star" data-value="2">&#9733;</span>
+        <span class="star" data-value="3">&#9733;</span>
+        <span class="star" data-value="4">&#9733;</span>
+        <span class="star" data-value="5">&#9733;</span>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Question 3: Problem Solving</label>
+      <div class="star-rating" data-question="q3">
+        <input type="hidden" name="q3" value="0">
+        <span class="star" data-value="1">&#9733;</span>
+        <span class="star" data-value="2">&#9733;</span>
+        <span class="star" data-value="3">&#9733;</span>
+        <span class="star" data-value="4">&#9733;</span>
+        <span class="star" data-value="5">&#9733;</span>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit These</button>
+  </form>
+</div>
+<style>
+.star-rating .star {
+  font-size: 1.5rem;
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.star-rating .star.selected,
+.star-rating .star:hover,
+.star-rating .star:hover ~ .star {
+  color: #f7d106;
+}
+</style>
+<script>
+document.querySelectorAll('.star-rating').forEach(function(rating) {
+  const stars = rating.querySelectorAll('.star');
+  const input = rating.querySelector('input[type="hidden"]');
+  stars.forEach(function(star, idx) {
+    star.addEventListener('mouseenter', function() {
+      stars.forEach((s, i) => {
+        s.classList.toggle('selected', i <= idx);
+      });
+    });
+    star.addEventListener('mouseleave', function() {
+      stars.forEach((s, i) => {
+        s.classList.toggle('selected', i < input.value);
+      });
+    });
+    star.addEventListener('click', function() {
+      input.value = idx + 1;
+      stars.forEach((s, i) => {
+        s.classList.toggle('selected', i <= idx);
+      });
+    });
+  });
+  rating.addEventListener('mouseleave', function() {
+    stars.forEach((s, i) => {
+      s.classList.toggle('selected', i < input.value);
+    });
+  });
+});
+</script>
+{{ end }}
