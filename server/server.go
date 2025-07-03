@@ -41,7 +41,7 @@ func configureRoutes(router *gin.Engine) {
 	router.StaticFS("/static", http.FS(staticFiles))
 
 	router.GET("/", rootHandler)
-	router.GET("/employee/:employeeName", auth.AuthRequired, employeeHandler)
+	router.GET("/employee/:employeeEmail", auth.AuthRequired, employeeHandler)
 	router.GET("/forbidden", forbiddenHandler)
 	auth.ConfigureAuthorizationHandlers(router)
 }
@@ -64,8 +64,8 @@ func rootHandler(c *gin.Context) {
 }
 
 func employeeHandler(c *gin.Context) {
-	employeeName := c.Param("employeeName")
-	employee, err := repository.GetEmployeeByName(employeeName)
+	employeeEmail := c.Param("employeeEmail")
+	employee, err := repository.GetEmployeeByEmail(employeeEmail)
 	if err != nil {
 		c.String(http.StatusInternalServerError, "Error retrieving employee: %v", err)
 		return

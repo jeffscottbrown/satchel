@@ -14,7 +14,15 @@ func SetRepository(r EmployeeRepository) {
 
 type EmployeeRepository interface {
 	GetEmployees() ([]model.Employee, error)
-	GetEmployeeByName(string) (model.Employee, error)
+	GetEmployeeByEmail(string) (model.Employee, error)
+	SaveEmployee(employee *model.Employee) error
+}
+
+func SaveEmployee(employee *model.Employee) error {
+	if employeeRepository == nil {
+		return errors.New("repository has not been initialized")
+	}
+	return employeeRepository.SaveEmployee(employee)
 }
 
 func GetEmployees() ([]model.Employee, error) {
@@ -28,15 +36,13 @@ func GetEmployees() ([]model.Employee, error) {
 	return employees, nil
 }
 
-func GetEmployeeByName(name string) (*model.Employee, error) {
-	employees, err := GetEmployees()
+func GetEmployeeByEmail(email string) (*model.Employee, error) {
+	if employeeRepository == nil {
+		return nil, errors.New("repository has not been initialized")
+	}
+	employee, err := employeeRepository.GetEmployeeByEmail(email)
 	if err != nil {
 		return nil, err
 	}
-	for _, employee := range employees {
-		if employee.Name == name {
-			return &employee, nil
-		}
-	}
-	return nil, errors.New("employee not found")
+	return &employee, nil
 }

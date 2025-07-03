@@ -13,7 +13,7 @@
             <tbody>
                 {{ range .Employees }}
                 <tr>
-                    <td><a class="app-link" hx-push-url="true" hx-target="#main" hx-get="/employee/{{ .Name }}"> {{ .Name }}</a></td>
+                    <td><a class="app-link" hx-push-url="true" hx-target="#main" hx-get="/employee/{{ .Email }}"> {{ .Name }}</a></td>
                 </tr>
                 {{ end }}
             </tbody>

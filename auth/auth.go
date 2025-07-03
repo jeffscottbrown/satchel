@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"errors"
 	"log/slog"
 	"net/http"
 	"os"
@@ -11,10 +12,13 @@ import (
 	"github.com/google/uuid"
 	"github.com/gorilla/sessions"
 	"github.com/jeffscottbrown/gogoogle/secrets"
+	"github.com/jeffscottbrown/satchel/model"
+	"github.com/jeffscottbrown/satchel/repository"
 	"github.com/joho/godotenv"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
 	"github.com/markbates/goth/providers/google"
+	"gorm.io/gorm"
 )
 
 type oauthConfig struct {
@@ -59,6 +63,32 @@ func authCallback(c *gin.Context) {
 	slog.Info("User authenticated", "name", user.Name)
 
 	gothic.StoreInSession("authenticatedUser", user.Name, req, res)
+
+	_, err = repository.GetEmployeeByEmail(user.Email)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			slog.Info("Profile not found in database - new profile being created", "email", user.Email)
+			newEmployee := &model.Employee{
+				Name:      user.Name,
+				Email:     user.Email,
+				ImageName: user.AvatarURL,
+			}
+			newEmployee.AddScore("Temporary Thing #1", "1")
+			newEmployee.AddScore("Temporary Thing #2", "2")
+			newEmployee.AddScore("Temporary Thing #3", "3")
+			newEmployee.AddScore("Temporary Thing #4", "4")
+			if err := repository.SaveEmployee(newEmployee); err != nil {
+				slog.Error("Error adding employee", "error", err)
+				c.AbortWithError(http.StatusInternalServerError, err)
+				return
+			}
+			slog.Info("New employee added", "email", user.Email)
+
+		} else {
+			slog.Error("Error querying employee", "error", err)
+			return
+		}
+	}
 
 	http.Redirect(res, req, "/", http.StatusTemporaryRedirect)
 }
