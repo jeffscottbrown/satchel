@@ -9,6 +9,7 @@ import (
 
 	"github.com/jeffscottbrown/satchel/model"
 	"github.com/jeffscottbrown/satchel/repository"
+	"github.com/jeffscottbrown/satchel/utils"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -54,27 +55,27 @@ func NewEmployeeRepository(db *gorm.DB) repository.EmployeeRepository {
 }
 
 func InitializeDatabase() {
-	dbUser := os.Getenv("SATCHEL_DB_USER")
+	dbUser := utils.RetrieveSecretValue("SATCHEL_DB_USER")
 	if dbUser == "" {
 		slog.Error("environment variable SATCHEL_DB_USER not set")
 		os.Exit(1)
 	}
-	dbPassword := os.Getenv("SATCHEL_DB_PASSWORD")
+	dbPassword := utils.RetrieveSecretValue("SATCHEL_DB_PASSWORD")
 	if dbPassword == "" {
 		slog.Error("environment variable SATCHEL_DB_PASSWORD not set")
 		os.Exit(1)
 	}
-	dbName := os.Getenv("SATCHEL_DB_NAME")
+	dbName := utils.RetrieveSecretValue("SATCHEL_DB_NAME")
 	if dbName == "" {
 		slog.Error("environment variable SATCHEL_DB_NAME not set")
 		os.Exit(1)
 	}
-	dbHost := os.Getenv("SATCHEL_DB_HOST")
+	dbHost := utils.RetrieveSecretValue("SATCHEL_DB_HOST")
 	if dbHost == "" {
 		slog.Error("environment variable SATCHEL_DB_HOST not set")
 		os.Exit(1)
 	}
-	dbPort := os.Getenv("SATCHEL_DB_PORT")
+	dbPort := utils.RetrieveSecretValue("SATCHEL_DB_PORT")
 	if dbPort == "" {
 		slog.Error("environment variable SATCHEL_DB_PORT not set")
 		os.Exit(1)

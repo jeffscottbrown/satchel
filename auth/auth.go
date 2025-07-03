@@ -14,6 +14,7 @@ import (
 	"github.com/jeffscottbrown/gogoogle/secrets"
 	"github.com/jeffscottbrown/satchel/model"
 	"github.com/jeffscottbrown/satchel/repository"
+	"github.com/jeffscottbrown/satchel/utils"
 	"github.com/joho/godotenv"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
@@ -129,7 +130,7 @@ func createOauthConfig(provider string) *oauthConfig {
 
 	return &oauthConfig{
 		callbackUrl:  callbackUrl,
-		clientId:     retrieveSecretValue(idVarName),
+		clientId:     utils.RetrieveSecretValue(idVarName),
 		clientSecret: retrieveSecretValue(secretVarName),
 	}
 }
