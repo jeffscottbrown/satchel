@@ -7,13 +7,16 @@
   </div>
   <div class="card-stats">
 
-    
-    {{ range $score := .Employee.Scores }}
-      <div class="stat">
-        <span class="label">{{ $score.Key }}:</span>
-        <span class="value">{{ $score.Value }}</span>
-      </div>
-    {{ end }}
+    <table class="table table-striped">
+      <tbody>
+        {{ range $score := .Employee.Reflections }}
+        <tr>
+          <td>{{ $score.Key }}</td>
+          <td>{{ $score.Value }}</td>
+        </tr>
+        {{ end }}
+      </tbody>
+    </table>
 
   </div>
 </div>

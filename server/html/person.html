@@ -1,7 +1,9 @@
 {{ define "person" }}
-
+<div id="person">
 {{ template "card" . }}
 
-{{ template "knowyou" . }}
-
+{{ if .IsEditable }}
+    {{ template "knowyou" . }}
+{{ end }}
+</div>
 {{ end }}

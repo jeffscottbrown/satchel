@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"github.com/gorilla/sessions"
 	"github.com/jeffscottbrown/gogoogle/secrets"
 	"github.com/jeffscottbrown/satchel/model"
@@ -61,9 +60,9 @@ func authCallback(c *gin.Context) {
 		c.Redirect(http.StatusFound, "/forbidden")
 		return
 	}
-	slog.Info("User authenticated", "name", user.Name)
+	slog.Info("User authenticated", "email", user.Email)
 
-	gothic.StoreInSession("authenticatedUser", user.Name, req, res)
+	gothic.StoreInSession("authenticatedUser", user.Email, req, res)
 
 	_, err = repository.GetEmployeeByEmail(user.Email)
 	if err != nil {
@@ -74,10 +73,10 @@ func authCallback(c *gin.Context) {
 				Email:     user.Email,
 				ImageName: user.AvatarURL,
 			}
-			newEmployee.AddScore("Temporary Thing #1", "1")
-			newEmployee.AddScore("Temporary Thing #2", "2")
-			newEmployee.AddScore("Temporary Thing #3", "3")
-			newEmployee.AddScore("Temporary Thing #4", "4")
+			newEmployee.AddReflection("Temporary Thing #1", "1")
+			newEmployee.AddReflection("Temporary Thing #2", "2")
+			newEmployee.AddReflection("Temporary Thing #3", "3")
+			newEmployee.AddReflection("Temporary Thing #4", "4")
 			if err := repository.SaveEmployee(newEmployee); err != nil {
 				slog.Error("Error adding employee", "error", err)
 				c.AbortWithError(http.StatusInternalServerError, err)
@@ -105,7 +104,8 @@ func init() {
 		slog.Warn("Problem loading .env file", "error", err)
 	}
 
-	gothic.Store = sessions.NewCookieStore([]byte(uuid.NewString()))
+	gothic.Store = sessions.NewCookieStore([]byte("dev-secret-don't-use-in-prod"))
+
 	slog.Debug("Configuring authentication providers")
 
 	googleConfig := createOauthConfig("google")
@@ -165,7 +165,7 @@ func providerAware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		req := c.Request
 		provider := c.Param("provider")
-		c.Request = req.WithContext(context.WithValue(context.Background(), "provider", provider))
+		c.Request = req.WithContext(context.WithValue(req.Context(), "provider", provider))
 
 		c.Next()
 	}

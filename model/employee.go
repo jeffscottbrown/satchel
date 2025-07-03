@@ -5,27 +5,27 @@ import (
 )
 
 type Employee struct {
-	ID        uint `gorm:"primaryKey"`
-	Name      string
-	Position  string
-	Scores    []Score `gorm:"foreignKey:EmployeeID"`
-	ImageName string
-	Email     string
-	mu        sync.Mutex `gorm:"-"`
+	ID          uint `gorm:"primaryKey"`
+	Name        string
+	Position    string
+	Reflections []Reflection `gorm:"foreignKey:EmployeeID"`
+	ImageName   string
+	Email       string     `gorm:"uniqueIndex;not null"`
+	mu          sync.Mutex `gorm:"-"`
 }
 
-type Score struct {
+type Reflection struct {
 	ID         uint `gorm:"primaryKey"`
 	Key        string
 	Value      string
 	EmployeeID uint
 }
 
-func (e *Employee) AddScore(scoreName string, value string) {
+func (e *Employee) AddReflection(scoreName string, value string) {
 	e.mu.Lock()
 	defer e.mu.Unlock()
 
-	e.Scores = append(e.Scores, Score{
+	e.Reflections = append(e.Reflections, Reflection{
 		Key:   scoreName,
 		Value: value,
 	})

@@ -3,6 +3,7 @@ package server
 import (
 	"embed"
 	"io/fs"
+	"strconv"
 
 	"github.com/jeffscottbrown/satchel/repository"
 	"github.com/markbates/goth/gothic"
@@ -42,8 +43,39 @@ func configureRoutes(router *gin.Engine) {
 
 	router.GET("/", rootHandler)
 	router.GET("/employee/:employeeEmail", auth.AuthRequired, employeeHandler)
+	router.POST("/reflection", auth.AuthRequired, addReflectionHandler)
+	router.DELETE("/reflection/:reflectionId", auth.AuthRequired, deleteReflectionHandler)
 	router.GET("/forbidden", forbiddenHandler)
 	auth.ConfigureAuthorizationHandlers(router)
+}
+
+func deleteReflectionHandler(c *gin.Context) {
+	authenticatedUser, _ := gothic.GetFromSession("authenticatedUser", c.Request)
+
+	reflectionId := c.Param("reflectionId")
+
+	id, err := strconv.ParseUint(reflectionId, 10, 64)
+	if err != nil {
+		c.String(http.StatusBadRequest, "Invalid reflection ID")
+		return
+	}
+	repository.DeleteReflection(authenticatedUser, uint(id))
+
+	user, _ := repository.GetEmployeeByEmail(authenticatedUser)
+	renderTemplate(c, "person", gin.H{
+		"Employee":   user,
+		"IsEditable": true})
+}
+
+func addReflectionHandler(c *gin.Context) {
+	authenticatedUser, _ := gothic.GetFromSession("authenticatedUser", c.Request)
+	newReflectioName := c.PostForm("new-reflection-name")
+	newReflectionValue := c.PostForm("new-reflection-value")
+	repository.AddReflection(authenticatedUser, newReflectioName, newReflectionValue)
+	user, _ := repository.GetEmployeeByEmail(authenticatedUser)
+	renderTemplate(c, "person", gin.H{
+		"Employee":   user,
+		"IsEditable": true})
 }
 
 func forbiddenHandler(c *gin.Context) {
@@ -70,8 +102,13 @@ func employeeHandler(c *gin.Context) {
 		c.String(http.StatusInternalServerError, "Error retrieving employee: %v", err)
 		return
 	}
+	authenticatedUser, _ := gothic.GetFromSession("authenticatedUser", c.Request)
+
+	isEditable := authenticatedUser != "" && authenticatedUser == employee.Email
+
 	renderTemplate(c, "person", gin.H{
-		"Employee": employee,
+		"Employee":   employee,
+		"IsEditable": isEditable,
 	})
 }
 

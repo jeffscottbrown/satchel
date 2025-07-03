@@ -16,6 +16,7 @@ type EmployeeRepository interface {
 	GetEmployees() ([]model.Employee, error)
 	GetEmployeeByEmail(string) (model.Employee, error)
 	SaveEmployee(employee *model.Employee) error
+	DeleteReflection(reflectionId uint) error
 }
 
 func SaveEmployee(employee *model.Employee) error {
@@ -45,4 +46,30 @@ func GetEmployeeByEmail(email string) (*model.Employee, error) {
 		return nil, err
 	}
 	return &employee, nil
+}
+
+func DeleteReflection(email string, reflectionId uint) error {
+	employee, err := GetEmployeeByEmail(email)
+	if err != nil {
+		return err
+	}
+	found := false
+	for _, reflection := range employee.Reflections {
+		if reflection.ID == reflectionId {
+			found = true
+			break
+		}
+	}
+	if !found {
+		return errors.New("reflection not found")
+	}
+	return employeeRepository.DeleteReflection(reflectionId)
+}
+func AddReflection(email string, name string, value string) error {
+	employee, err := GetEmployeeByEmail(email)
+	if err != nil {
+		return err
+	}
+	employee.AddReflection(name, value)
+	return SaveEmployee(employee)
 }

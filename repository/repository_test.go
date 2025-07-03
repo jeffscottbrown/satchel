@@ -14,6 +14,11 @@ type mockEmployeeRepository struct {
 	err       error
 }
 
+// DeleteReflection implements EmployeeRepository.
+func (m *mockEmployeeRepository) DeleteReflection(reflectionId uint) error {
+	panic("unimplemented")
+}
+
 // GetEmployeeByEmail implements EmployeeRepository.
 func (m *mockEmployeeRepository) GetEmployeeByEmail(email string) (model.Employee, error) {
 	for _, employee := range m.employees {

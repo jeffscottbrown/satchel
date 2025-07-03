@@ -1,5 +1,6 @@
 {{ define "knowyou" }}
 
+
 <div class="container mt-5">
   <form id="knowyou-form">
     <h2 class="mb-4">The Team Wants To Know You</h2>
@@ -30,20 +31,46 @@
     <button type="submit" class="btn btn-primary">Submit These</button>
   </form>
 </div>
-
-<!-- Modal -->
-<div class="modal fade" id="thankYouModal" tabindex="-1" aria-labelledby="thankYouModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="thankYouModalLabel">Thank You</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="container mt-4">
+  <h4>Additional Reflections Of You</h4>
+  <div id="reflections-list">
+    {{ range .Employee.Reflections }}
+      <div class="row align-items-center mb-2" id="reflection-{{ .ID }}">
+        <div class="col">
+          <input type="text" class="form-control" value="{{ .Key }}" readonly>
+        </div>
+        <div class="col">
+          <input type="text" class="form-control" value="{{ .Value }}" readonly>
+        </div>
+        <div class="col-auto">
+            <button 
+            class="btn btn-danger btn-sm"
+            hx-delete="/reflection/{{ .ID }}"
+            hx-target="#person"
+            hx-swap="innerHTML"
+            aria-label="Delete Reflection"
+            title="Delete Reflection"
+          >&#10005;</button>
+        </div>
       </div>
-      <div class="modal-body">
-        Not Yet Implemented - Thank You For Looking
+    {{ end }}
+    <div class="row align-items-center mb-2" name="reflectionForm">
+      <div class="col">
+        <input type="text" class="form-control" id="new-reflection-name" name="new-reflection-name" placeholder="Reflection Name (ex. Favorite Color)">
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      <div class="col">
+        <input type="text" class="form-control" id="new-reflection-value" name="new-reflection-value" placeholder="Reflection Value (ex. Blue)">
+      </div>
+      <div class="col-auto">
+        <button 
+          class="btn btn-success btn-sm"
+          hx-post="/reflection"
+          hx-include="[name='reflectionForm']"
+          hx-target="#person"
+          hx-swap="innerHTML"
+          aria-label="Add New Reflection"
+          title="Add New Reflection"
+        >Add New Reflection</button>
       </div>
     </div>
   </div>

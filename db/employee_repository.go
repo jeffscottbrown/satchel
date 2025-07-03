@@ -18,6 +18,16 @@ type employeeRepository struct {
 	db *gorm.DB
 }
 
+// DeleteReflection implements repository.EmployeeRepository.
+func (r *employeeRepository) DeleteReflection(reflectionId uint) error {
+	if err := r.db.WithContext(context.Background()).Delete(&model.Reflection{}, reflectionId).Error; err != nil {
+		slog.Error("failed to delete reflection", slog.Any("error", err), slog.Any("reflectionId", reflectionId))
+		return err
+	}
+	slog.Info("reflection deleted successfully", slog.Any("reflectionId", reflectionId))
+	return nil
+}
+
 // SaveEmployee implements repository.EmployeeRepository.
 func (r *employeeRepository) SaveEmployee(employee *model.Employee) error {
 	// Use the context.Background() to avoid passing nil context
@@ -33,7 +43,7 @@ func (r *employeeRepository) SaveEmployee(employee *model.Employee) error {
 // GetEmployeeByName implements repository.EmployeeRepository.
 func (r *employeeRepository) GetEmployeeByEmail(email string) (model.Employee, error) {
 	var employee model.Employee
-	err := r.db.WithContext(context.Background()).Preload("Scores").Where("email = ?", email).First(&employee).Error
+	err := r.db.WithContext(context.Background()).Preload("Reflections").Where("email = ?", email).First(&employee).Error
 	if err != nil {
 		return model.Employee{}, err
 	}
@@ -100,7 +110,7 @@ func InitializeDatabase() {
 		slog.Error("could not connect to database after 3 attempts", slog.Any("error", err))
 		os.Exit(-1)
 	}
-	if err := db.AutoMigrate(&model.Employee{}, &model.Score{}); err != nil {
+	if err := db.AutoMigrate(&model.Employee{}, &model.Reflection{}); err != nil {
 		slog.Error("failed to auto-migrate database", slog.Any("error", err))
 		os.Exit(-1)
 	}
