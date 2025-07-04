@@ -14,7 +14,6 @@ import (
 )
 
 func TestRootEndpoint(t *testing.T) {
-	t.Skip()
 	gin.SetMode(gin.TestMode)
 
 	router := createRouter()
@@ -45,7 +44,6 @@ func TestRootHandler_GetEmployeeesError(t *testing.T) {
 }
 
 func TestEmployeeHandler(t *testing.T) {
-	t.Skip()
 	gin.SetMode(gin.TestMode)
 	w := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(w)
