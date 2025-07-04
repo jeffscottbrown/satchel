@@ -12,7 +12,7 @@
       <div class="row mb-2">
         <div class="col">
           <textarea class="form-control text-start" id="bio" name="bio" rows="4" maxlength="250"
-            placeholder="Write up to 250 characters...">{{ .Employee.Bio }}</textarea>
+            placeholder="Write up to 750 characters...">{{ .Employee.Bio }}</textarea>
         </div>
       </div>
       <div class="row mb-2">
@@ -34,7 +34,7 @@
 </div>
 <script>
   document.getElementById('bio').addEventListener('input', function () {
-    const max = 250;
+    const max = 750;
     const len = this.value.length;
     document.getElementById('bio-char-count').textContent = (max - len) + ' characters left';
   });
