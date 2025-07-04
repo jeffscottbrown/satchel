@@ -108,6 +108,11 @@ func TestEmployeeHandler(t *testing.T) {
 type errorThrowingEmployeeRepository struct {
 }
 
+// DeleteEmployee implements repository.EmployeeRepository.
+func (m *errorThrowingEmployeeRepository) DeleteEmployee(email string) error {
+	panic("unimplemented")
+}
+
 // DeleteReflection implements repository.EmployeeRepository.
 func (m *errorThrowingEmployeeRepository) DeleteReflection(reflectionId uint) error {
 	panic("unimplemented")

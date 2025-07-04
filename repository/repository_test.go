@@ -65,6 +65,72 @@ func TestGetEmployeeByName_RepositoryReturnsError(t *testing.T) {
 	assert.EqualError(t, err, "record not found")
 }
 
+func TestDeleteEmployee(t *testing.T) {
+	email := "test@somedomain.com"
+	emp, err := GetEmployeeByEmail(email)
+	assert.Error(t, err)
+	assert.Nil(t, emp)
+
+	err = SaveEmployee(&model.Employee{
+		Email: email,
+	})
+	assert.NoError(t, err)
+
+	emp, err = GetEmployeeByEmail(email)
+	assert.NoError(t, err)
+	assert.NotNil(t, emp)
+
+	err = DeleteEmployee(email)
+	assert.NoError(t, err)
+	emp, err = GetEmployeeByEmail(email)
+	assert.Error(t, err)
+	assert.Nil(t, emp)
+}
+
+func TestSavePosition(t *testing.T) {
+	email := "someone@somewhere.com"
+	t.Cleanup(func() {
+		err := DeleteEmployee(email)
+		assert.NoError(t, err)
+	})
+	SaveEmployee(&model.Employee{
+		Email: email,
+	})
+	emp, err := GetEmployeeByEmail(email)
+	assert.NoError(t, err)
+	assert.NotNil(t, emp)
+	assert.Equal(t, "", emp.Position)
+
+	err = SavePosition(email, "Some New Position")
+
+	emp, err = GetEmployeeByEmail(email)
+	assert.NoError(t, err)
+	assert.NotNil(t, emp)
+	assert.Equal(t, "Some New Position", emp.Position)
+}
+
+func TestSaveBio(t *testing.T) {
+	email := "someone@somewhere.com"
+	t.Cleanup(func() {
+		err := DeleteEmployee(email)
+		assert.NoError(t, err)
+	})
+	SaveEmployee(&model.Employee{
+		Email: email,
+	})
+	emp, err := GetEmployeeByEmail(email)
+	assert.NoError(t, err)
+	assert.NotNil(t, emp)
+	assert.Equal(t, "", emp.Bio)
+
+	err = SaveBio(email, "Some New Bio")
+
+	emp, err = GetEmployeeByEmail(email)
+	assert.NoError(t, err)
+	assert.NotNil(t, emp)
+	assert.Equal(t, "Some New Bio", emp.Bio)
+}
+
 func TestMain(m *testing.M) {
 	RunTestsWithTestContainer(m)
 }
