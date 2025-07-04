@@ -1,0 +1,45 @@
+{{ define "preferences" }}
+<div class="col">
+
+  <div class="row mb-1">
+    <div class="col-12 text-start">
+      <label for="preferences" class="form-label">Some Of Your Preferences</label>
+    </div>
+    <div class="mb-4 preference">
+      <label class="form-label">Speaking With Clients</label>
+      <div class="d-flex align-items-center">
+        <span class="me-2" style="width: 100px;">Not So Much</span>
+        <input type="range" class="form-range flex-grow-1 mx-2" min="1" max="5" step="1" name="q1">
+        <span class="ms-2" style="width: 100px;">Absolutely!</span>
+      </div>
+    </div>
+    <div class="mb-4 preference">
+      <label class="form-label"></label>
+      <div class="d-flex align-items-center">
+        <span class="me-2" style="width: 100px;">Problem Solving</span>
+        <input type="range" class="form-range flex-grow-1 mx-2" min="1" max="5" step="1" name="q2">
+        <span class="ms-2" style="width: 100px;">Absolutely!</span>
+      </div>
+    </div>
+    <div class="mb-4 preference">
+      <label class="form-label">Being Outgoing</label>
+      <div class="d-flex align-items-center">
+        <span class="me-2" style="width: 100px;">Not So Much</span>
+        <input type="range" class="form-range flex-grow-1 mx-2" min="1" max="5" step="1" name="q3">
+        <span class="ms-2" style="width: 100px;">Absolutely!</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col text-start">
+
+      <button type="button" class="btn btn-primary" hx-post="/preferences" hx-include="#preferences"
+        hx-target="#preferences" hx-swap="outerHTML">
+        Save These Preferences
+      </button>
+    </div>
+  </div>
+</div>
+
+{{ end }}

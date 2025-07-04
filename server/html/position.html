@@ -1,0 +1,13 @@
+{{ define "position" }}
+    <div class="col-12 text-start">
+        <label for="position" class="form-label">Position</label>
+    </div>
+    <div class="col-12 text-start">
+        <input type="text" class="form-control" id="position" name="position" placeholder="Enter Your Position"
+            value="{{ .Employee.Position }}">
+    </div>
+    <div class="col-12 text-start mt-2">
+        <button type="button" class="btn btn-primary" hx-post="/position" hx-include="#position" hx-target="#person"
+            hx-swap="outerHTML">Save Position</button>
+    </div>
+{{ end}}
