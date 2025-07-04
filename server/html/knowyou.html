@@ -25,7 +25,7 @@
           <div class="row">
             <div class="col text-start">
               <button type="button" class="btn btn-primary" hx-post="/bio" hx-include="#bio" hx-target="#person"
-                hx-swap="innerHTML">Save Bio</button>
+                hx-swap="outerHTML">Save Bio</button>
             </div>
           </div>
         </div>
@@ -78,7 +78,7 @@
         <input type="text" class="form-control" value="{{ .Value }}" readonly>
       </div>
       <div class="col-auto">
-        <button class="btn btn-danger btn-sm" hx-delete="/reflection/{{ .ID }}" hx-target="#person" hx-swap="innerHTML"
+        <button class="btn btn-danger btn-sm" hx-delete="/reflection/{{ .ID }}" hx-target="#person" hx-swap="outerHTML"
           aria-label="Delete Reflection" title="Delete Reflection">&#10005;</button>
       </div>
     </div>
@@ -94,7 +94,7 @@
       </div>
       <div class="col-auto">
         <button class="btn btn-success btn-sm" hx-post="/reflection" hx-include="[name='reflectionForm']"
-          hx-target="#person" hx-swap="innerHTML" aria-label="Add New Reflection" title="Add New Reflection">Add New
+          hx-target="#person" hx-swap="outerHTML" aria-label="Add New Reflection" title="Add New Reflection">Add New
           Reflection</button>
       </div>
     </div>
