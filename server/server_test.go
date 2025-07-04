@@ -6,15 +6,23 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"context"
+	"fmt"
+	"os"
+	"time"
+
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gin-gonic/gin"
+	"github.com/jeffscottbrown/satchel/db"
 	"github.com/jeffscottbrown/satchel/model"
 	"github.com/jeffscottbrown/satchel/repository"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/testcontainers/testcontainers-go"
+	"github.com/testcontainers/testcontainers-go/wait"
 )
 
 func TestRootEndpoint(t *testing.T) {
-	t.Skip()
 	gin.SetMode(gin.TestMode)
 
 	router := createRouter()
@@ -45,12 +53,29 @@ func TestRootHandler_GetEmployeeesError(t *testing.T) {
 }
 
 func TestEmployeeHandler(t *testing.T) {
-	t.Skip()
+	repository.SaveEmployee(&model.Employee{
+		// Name:      "Henry David Thoreau",
+		Email: "henry@thewods.org",
+		Reflections: []model.Reflection{
+			{
+				Key:   "Contemplative",
+				Value: "10",
+			},
+			{
+				Key:   "Social",
+				Value: "3",
+			},
+			{
+				Key:   "Favorite Place",
+				Value: "The Pond",
+			},
+		},
+	})
 	gin.SetMode(gin.TestMode)
 	w := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(w)
 	c.Params = gin.Params{
-		{Key: "employeeName", Value: "Henry David Thoreau"},
+		{Key: "employeeEmail", Value: "henry@thewods.org"},
 	}
 	c.Request = httptest.NewRequest("GET", "/", nil)
 
@@ -84,8 +109,8 @@ func TestEmployeeHandler(t *testing.T) {
 		}
 	})
 
-	if got := doc.Find(".card-stats .stat").Length(); got != len(expected) {
-		t.Errorf("Expected %d .stat elements, got %d", len(expected), got)
+	if got := doc.Find(".card-stats table tbody tr").Length(); got != len(expected) {
+		t.Errorf("Expected %d stat rows, got %d", len(expected), got)
 	}
 }
 
@@ -108,4 +133,58 @@ func (m *errorThrowingEmployeeRepository) GetEmployees() ([]model.Employee, erro
 
 func (m *errorThrowingEmployeeRepository) GetEmployeeByEmail(email string) (model.Employee, error) {
 	return model.Employee{}, errors.New("An error occurred retrieving employee by email")
+}
+
+var postgresContainer testcontainers.Container
+
+func TestMain(m *testing.M) {
+	ctx := context.Background()
+
+	req := testcontainers.ContainerRequest{
+		Image:        "postgres:15-alpine",
+		ExposedPorts: []string{"5432/tcp"},
+		Env: map[string]string{
+			"POSTGRES_USER":     "testuser",
+			"POSTGRES_PASSWORD": "testpass",
+			"POSTGRES_DB":       "testdb",
+		},
+		WaitingFor: wait.ForListeningPort("5432/tcp").WithStartupTimeout(60 * time.Second),
+	}
+
+	var err error
+	postgresContainer, err = testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
+		ContainerRequest: req,
+		Started:          true,
+	})
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Could not start postgres container: %v\n", err)
+		os.Exit(1)
+	}
+
+	host, err := postgresContainer.Host(ctx)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Could not get container host: %v\n", err)
+		os.Exit(1)
+	}
+	port, err := postgresContainer.MappedPort(ctx, "5432")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Could not get container port: %v\n", err)
+		os.Exit(1)
+	}
+
+	os.Setenv("SATCHEL_DB_HOST", host)
+	os.Setenv("SATCHEL_DB_PORT", port.Port())
+	os.Setenv("SATCHEL_DB_USER", "testuser")
+	os.Setenv("SATCHEL_DB_PASSWORD", "testpass")
+	os.Setenv("SATCHEL_DB_NAME", "testdb")
+
+	db.InitializeDatabase()
+
+	code := m.Run()
+
+	if postgresContainer != nil {
+		_ = postgresContainer.Terminate(ctx)
+	}
+
+	os.Exit(code)
 }

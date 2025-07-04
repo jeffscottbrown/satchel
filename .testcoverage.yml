@@ -11,7 +11,7 @@ profile: coverage.out
 threshold:
   # (optional; default 0) 
   # Minimum coverage percentage required for individual files.
-  file: 25
+  file: 35
 
   # (optional; default 0) 
   # Minimum coverage percentage required for each package.
@@ -46,7 +46,6 @@ exclude:
     - ^pkg/baz     # exclude package `pkg/baz`
     - ^auth/      # exclude all files in `db` package
     - ^db/      # exclude all files in `db` package
-    - ^server/      # exclude all files in `db` package
     
 # File name of go-test-coverage breakdown file, which can be used to 
 # analyze coverage difference.
