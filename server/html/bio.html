@@ -1,8 +1,9 @@
 {{ define "bio" }}
 
 <div class="col-12 text-start">
-  <label for="bio" class="form-label">Bio</label>
+  <label class="h5">Bio</label>
 </div>
+
 <div class="col">
   <textarea class="form-control text-start" id="bio" name="bio" rows="4" maxlength="750"
     placeholder="Write up to 750 characters...">{{ .Employee.Bio }}</textarea>
