@@ -1,4 +1,4 @@
-package db
+package repository
 
 import (
 	"context"
@@ -8,18 +8,17 @@ import (
 	"time"
 
 	"github.com/jeffscottbrown/satchel/model"
-	"github.com/jeffscottbrown/satchel/repository"
 	"github.com/jeffscottbrown/satchel/utils"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-type employeeRepository struct {
+type employeeDb struct {
 	db *gorm.DB
 }
 
 // DeleteReflection implements repository.EmployeeRepository.
-func (r *employeeRepository) DeleteReflection(reflectionId uint) error {
+func (r *employeeDb) DeleteReflection(reflectionId uint) error {
 	if err := r.db.WithContext(context.Background()).Delete(&model.Reflection{}, reflectionId).Error; err != nil {
 		slog.Error("failed to delete reflection", slog.Any("error", err), slog.Any("reflectionId", reflectionId))
 		return err
@@ -29,7 +28,7 @@ func (r *employeeRepository) DeleteReflection(reflectionId uint) error {
 }
 
 // SaveEmployee implements repository.EmployeeRepository.
-func (r *employeeRepository) SaveEmployee(employee *model.Employee) error {
+func (r *employeeDb) SaveEmployee(employee *model.Employee) error {
 	// Use the context.Background() to avoid passing nil context
 	ctx := context.Background()
 	if err := r.db.WithContext(ctx).Save(employee).Error; err != nil {
@@ -41,7 +40,7 @@ func (r *employeeRepository) SaveEmployee(employee *model.Employee) error {
 }
 
 // GetEmployeeByName implements repository.EmployeeRepository.
-func (r *employeeRepository) GetEmployeeByEmail(email string) (model.Employee, error) {
+func (r *employeeDb) GetEmployeeByEmail(email string) (model.Employee, error) {
 	var employee model.Employee
 	err := r.db.WithContext(context.Background()).Preload("Reflections").Where("email = ?", email).First(&employee).Error
 	if err != nil {
@@ -51,7 +50,7 @@ func (r *employeeRepository) GetEmployeeByEmail(email string) (model.Employee, e
 }
 
 // GetEmployees implements repository.EmployeeRepository.
-func (r *employeeRepository) GetEmployees() ([]model.Employee, error) {
+func (r *employeeDb) GetEmployees() ([]model.Employee, error) {
 	var employees []model.Employee
 	err := r.db.WithContext(context.Background()).Find(&employees).Error
 	if err != nil {
@@ -60,8 +59,8 @@ func (r *employeeRepository) GetEmployees() ([]model.Employee, error) {
 	return employees, nil
 }
 
-func NewEmployeeRepository(db *gorm.DB) repository.EmployeeRepository {
-	return &employeeRepository{db: db}
+func NewEmployeeRepository(db *gorm.DB) EmployeeRepository {
+	return &employeeDb{db: db}
 }
 
 func InitializeDatabase() {
@@ -97,7 +96,7 @@ func InitializeDatabase() {
 	for i := 0; i < 3; i++ {
 		db, err = gorm.Open(postgres.Open(connStr), &gorm.Config{})
 		if err == nil {
-			repository.SetRepository(NewEmployeeRepository(db))
+			SetRepository(NewEmployeeRepository(db))
 			break
 		}
 		if i < 2 {

@@ -19,7 +19,7 @@ threshold:
 
   # (optional; default 0) 
   # Minimum overall project coverage percentage required.
-  total: 40
+  total: 50
 
 # Holds regexp rules which will override thresholds for matched files or packages 
 # using their paths.
@@ -33,7 +33,7 @@ override:
   - path: ^server$
     threshold: 40
   - path: ^repository$
-    threshold: 30
+    threshold: 50
   - path: ^auth$
     threshold: 40
 
@@ -46,7 +46,6 @@ exclude:
     - \.pb\.go$    # excludes all protobuf generated files
     - ^pkg/bar     # exclude package `pkg/bar`
     - ^pkg/baz     # exclude package `pkg/baz`
-    - ^db/      # exclude all files in `db` package
     
 # File name of go-test-coverage breakdown file, which can be used to 
 # analyze coverage difference.

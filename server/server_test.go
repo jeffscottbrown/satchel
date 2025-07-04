@@ -6,20 +6,11 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"context"
-	"fmt"
-	"os"
-	"time"
-
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gin-gonic/gin"
-	"github.com/jeffscottbrown/satchel/db"
 	"github.com/jeffscottbrown/satchel/model"
 	"github.com/jeffscottbrown/satchel/repository"
 	"github.com/stretchr/testify/assert"
-
-	"github.com/testcontainers/testcontainers-go"
-	"github.com/testcontainers/testcontainers-go/wait"
 )
 
 func TestRootEndpoint(t *testing.T) {
@@ -135,56 +126,6 @@ func (m *errorThrowingEmployeeRepository) GetEmployeeByEmail(email string) (mode
 	return model.Employee{}, errors.New("An error occurred retrieving employee by email")
 }
 
-var postgresContainer testcontainers.Container
-
 func TestMain(m *testing.M) {
-	ctx := context.Background()
-
-	req := testcontainers.ContainerRequest{
-		Image:        "postgres:15-alpine",
-		ExposedPorts: []string{"5432/tcp"},
-		Env: map[string]string{
-			"POSTGRES_USER":     "testuser",
-			"POSTGRES_PASSWORD": "testpass",
-			"POSTGRES_DB":       "testdb",
-		},
-		WaitingFor: wait.ForListeningPort("5432/tcp").WithStartupTimeout(60 * time.Second),
-	}
-
-	var err error
-	postgresContainer, err = testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
-		ContainerRequest: req,
-		Started:          true,
-	})
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Could not start postgres container: %v\n", err)
-		os.Exit(1)
-	}
-
-	host, err := postgresContainer.Host(ctx)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Could not get container host: %v\n", err)
-		os.Exit(1)
-	}
-	port, err := postgresContainer.MappedPort(ctx, "5432")
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Could not get container port: %v\n", err)
-		os.Exit(1)
-	}
-
-	os.Setenv("SATCHEL_DB_HOST", host)
-	os.Setenv("SATCHEL_DB_PORT", port.Port())
-	os.Setenv("SATCHEL_DB_USER", "testuser")
-	os.Setenv("SATCHEL_DB_PASSWORD", "testpass")
-	os.Setenv("SATCHEL_DB_NAME", "testdb")
-
-	db.InitializeDatabase()
-
-	code := m.Run()
-
-	if postgresContainer != nil {
-		_ = postgresContainer.Terminate(ctx)
-	}
-
-	os.Exit(code)
+	repository.RunTestsWithTestContainer(m)
 }
