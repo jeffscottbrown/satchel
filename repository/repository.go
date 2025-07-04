@@ -48,6 +48,15 @@ func GetEmployeeByEmail(email string) (*model.Employee, error) {
 	return &employee, nil
 }
 
+func SavePosition(email string, position string) error {
+	employee, err := GetEmployeeByEmail(email)
+	if err != nil {
+		return err
+	}
+	employee.Position = position
+	return SaveEmployee(employee)
+}
+
 func SaveBio(email string, bio string) error {
 	employee, err := GetEmployeeByEmail(email)
 	if err != nil {

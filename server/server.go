@@ -44,10 +44,25 @@ func configureRoutes(router *gin.Engine) {
 	router.GET("/", rootHandler)
 	router.GET("/employee/:employeeEmail", auth.AuthRequired, employeeHandler)
 	router.POST("/bio", auth.AuthRequired, bioHandler)
+	router.POST("/position", auth.AuthRequired, positionHandler)
 	router.POST("/reflection", auth.AuthRequired, addReflectionHandler)
 	router.DELETE("/reflection/:reflectionId", auth.AuthRequired, deleteReflectionHandler)
 	router.GET("/forbidden", forbiddenHandler)
 	auth.ConfigureAuthorizationHandlers(router)
+}
+
+func positionHandler(c *gin.Context) {
+	authenticatedUser, _ := gothic.GetFromSession("authenticatedUser", c.Request)
+	newPosition := c.PostForm("position")
+	if newPosition == "" {
+		c.String(http.StatusBadRequest, "Position cannot be empty")
+		return
+	}
+	repository.SavePosition(authenticatedUser, newPosition)
+	user, _ := repository.GetEmployeeByEmail(authenticatedUser)
+	renderTemplate(c, "person", gin.H{
+		"Employee":   user,
+		"IsEditable": true})
 }
 
 func bioHandler(c *gin.Context) {

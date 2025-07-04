@@ -5,10 +5,24 @@
     <h2 class="mb-4">The Team Wants To Know You</h2>
     <div class="row mb-2">
       <div class="col">
-        <label for="bio" class="form-label text-start w-100">Tell Us A Little About Yourself</label>
+        <label class="form-label text-start w-100">Tell Us A Little About Yourself</label>
+      </div>
+    </div>
+    <div class="row mb-2 position">
+      <div class="col-12 text-start">
+        <label for="position" class="form-label">Position</label>
+      </div>
+      <div class="col-12 text-start">
+        <input type="text" class="form-control" id="position" name="position" placeholder="Enter Your Position" value="{{ .Employee.Position }}">
+      </div>
+      <div class="col-12 text-start mt-2">
+        <button type="button" class="btn btn-primary" hx-post="/position" hx-include="#position" hx-target="#person" hx-swap="outerHTML">Save Position</button>
       </div>
     </div>
     <div class="row mb-2 bio">
+      <div class="col-12 text-start">
+        <label for="bio" class="form-label">Bio</label>
+      </div>
       <div class="col">
         <textarea class="form-control text-start" id="bio" name="bio" rows="4" maxlength="750"
           placeholder="Write up to 750 characters...">{{ .Employee.Bio }}</textarea>
@@ -29,8 +43,11 @@
         </div>
       </div>
     </div>
-    <div class="sliders">
-      <div class="mb-4 ">
+    <div class="preferences">
+      <div class="col-12 text-start">
+        <label for="preferences" class="form-label">Some Of Your Preferences</label>
+      </div>
+      <div class="mb-4 preference">
         <label class="form-label">Speaking With Clients</label>
         <div class="d-flex align-items-center">
           <span class="me-2" style="width: 100px;">Not So Much</span>
@@ -38,7 +55,7 @@
           <span class="ms-2" style="width: 100px;">Absolutely!</span>
         </div>
       </div>
-      <div class="mb-4">
+      <div class="mb-4 preference">
         <label class="form-label"></label>
         <div class="d-flex align-items-center">
           <span class="me-2" style="width: 100px;">Problem Solving</span>
@@ -46,7 +63,7 @@
           <span class="ms-2" style="width: 100px;">Absolutely!</span>
         </div>
       </div>
-      <div class="mb-4">
+      <div class="mb-4 preference">
         <label class="form-label">Being Outgoing</label>
         <div class="d-flex align-items-center">
           <span class="me-2" style="width: 100px;">Not So Much</span>
@@ -54,7 +71,7 @@
           <span class="ms-2" style="width: 100px;">Absolutely!</span>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary">Submit These</button>
+      <button type="submit" class="btn btn-primary">Submit These Preferences</button>
     </div>
     <div class="container mt-4 additional-reflections">
       <h4>Additional Reflections Of You</h4>
@@ -93,6 +110,7 @@
     </div>
   </form>
 </div>
+
 <script>
   document.getElementById('bio').addEventListener('input', function () {
     const max = 750;
