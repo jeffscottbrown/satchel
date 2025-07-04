@@ -1,38 +1,35 @@
 {{ define "bio" }}
 
-<div class="col-12 text-start">
-  <label class="h5">Bio</label>
-</div>
-
 <div class="col">
-  <textarea class="form-control text-start" id="bio" name="bio" rows="4" maxlength="750"
-    placeholder="Write up to 750 characters...">{{ .Employee.Bio }}</textarea>
-</div>
-<div class="row mb-2">
-  <div class="col">
-    <div class="row mb-1">
-      <div class="col text-start">
-        <small id="bio-char-count" class="text-muted"></small>
+  <div class="row text-start mb-2">
+    <label class="h5">Bio</label>
+  </div>
+
+  <div class="row mb-2">
+    <textarea class="form-control text-start" id="biotext" name="biotext" rows="4" maxlength="750"
+      placeholder="Write up to 750 characters...">{{ .Employee.Bio }}</textarea>
+  </div>
+  <div class="row mb-2">
+    <div class="col">
+      <div class="row mb-1">
+        <div class="col text-start">
+          <small id="bio-char-count" class="text-muted"></small>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col text-start">
-        <button type="button" class="btn btn-primary" hx-post="/bio" hx-include="#bio" hx-target="#person"
-          hx-swap="outerHTML">Save Bio</button>
+      <div class="row">
+        <div class="col-auto">
+          <button type="button" class="btn btn-primary" hx-post="/bio" hx-include="#biotext" hx-target="#person"
+            hx-swap="outerHTML">Save Bio</button>
+        </div>
       </div>
     </div>
   </div>
 </div>
-
 <script>
-  document.getElementById('bio').addEventListener('input', function () {
+  document.getElementById('biotext').addEventListener('input', function () {
     const max = 750;
     const len = this.value.length;
     document.getElementById('bio-char-count').textContent = (max - len) + ' characters left';
-  });
-  document.getElementById('knowyou-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    alert('Not Yet Implemented - Thank You For Looking!');
   });
 </script>
 

@@ -2,7 +2,7 @@
 <div class="col">
 
   <div class="row mb-1">
-    <div class="col-12 text-start">
+    <div class="col text-start">
       <label class="h5">Some Of Your Preferences</label>
     </div>
   </div>
@@ -15,6 +15,7 @@
       <span class="ms-2" style="width: 100px;">Absolutely!</span>
     </div>
   </div>
+
   <div class="row mb-4 preference">
     <label class="h6">Problem Solving</label>
     <div class="d-flex align-items-center">
@@ -23,6 +24,7 @@
       <span class="ms-2" style="width: 100px;">Absolutely!</span>
     </div>
   </div>
+
   <div class="row mb-4 preference">
     <label class="h6">Being Outgoing</label>
     <div class="d-flex align-items-center">
@@ -31,17 +33,22 @@
       <span class="ms-2" style="width: 100px;">Absolutely!</span>
     </div>
   </div>
-</div>
 
-<div class="row">
-  <div class="col text-start">
-
-    <button type="button" class="btn btn-primary" hx-post="/preferences" hx-include="#preferences"
-      hx-target="#preferences" hx-swap="outerHTML">
-      Save These Preferences
-    </button>
+  <div class="row">
+    <div class="col-auto">
+      <button type="button" class="btn btn-primary" id="submit-preferences" hx-post="/preferences" hx-include="#preferences"
+        hx-target="#preferences" hx-swap="outerHTML">
+        Save These Preferences
+      </button>
+    </div>
   </div>
 </div>
-</div>
+
+<script>
+  document.getElementById('submit-preferences').addEventListener('click', function (e) {
+    e.preventDefault();
+    alert('Not Yet Implemented - Thank You For Looking!');
+  });
+</script>
 
 {{ end }}

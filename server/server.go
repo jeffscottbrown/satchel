@@ -67,7 +67,7 @@ func positionHandler(c *gin.Context) {
 
 func bioHandler(c *gin.Context) {
 	authenticatedUser, _ := gothic.GetFromSession("authenticatedUser", c.Request)
-	repository.SaveBio(authenticatedUser, c.PostForm("bio"))
+	repository.SaveBio(authenticatedUser, c.PostForm("biotext"))
 	user, _ := repository.GetEmployeeByEmail(authenticatedUser)
 	renderTemplate(c, "person", gin.H{
 		"Employee":   user,

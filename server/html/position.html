@@ -6,7 +6,7 @@
         <input type="text" class="form-control" id="position" name="position" placeholder="Enter Your Position"
             value="{{ .Employee.Position }}">
     </div>
-    <div class="col-12 text-start mt-2">
+    <div class="col-auto">
         <button type="button" class="btn btn-primary" hx-post="/position" hx-include="#position" hx-target="#person"
             hx-swap="outerHTML">Save Position</button>
     </div>
