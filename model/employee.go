@@ -10,7 +10,8 @@ type Employee struct {
 	Position    string
 	Reflections []Reflection `gorm:"foreignKey:EmployeeID"`
 	ImageName   string
-	Email       string     `gorm:"uniqueIndex;not null"`
+	Email       string `gorm:"uniqueIndex;not null"`
+	Bio         string
 	mu          sync.Mutex `gorm:"-"`
 }
 

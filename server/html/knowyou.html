@@ -1,85 +1,110 @@
 {{ define "knowyou" }}
 
-
 <div class="container mt-5">
   <form id="knowyou-form">
     <h2 class="mb-4">The Team Wants To Know You</h2>
     <div class="mb-4">
-      <label class="form-label">Speaking With Clients</label>
-      <div class="d-flex align-items-center">
-        <span class="me-2" style="width: 100px;">Not So Much</span>
-        <input type="range" class="form-range flex-grow-1 mx-2" min="1" max="5" step="1" name="q1">
-        <span class="ms-2" style="width: 100px;">Absolutely!</span>
+      <div class="row mb-2">
+        <div class="col">
+          <label for="bio" class="form-label text-start w-100">Tell Us A Little About Yourself</label>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col">
+          <textarea class="form-control text-start" id="bio" name="bio" rows="4" maxlength="250"
+            placeholder="Write up to 250 characters...">{{ .Employee.Bio }}</textarea>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col">
+          <div class="row mb-1">
+            <div class="col text-start">
+              <small id="bio-char-count" class="text-muted"></small>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col text-start">
+              <button type="button" class="btn btn-primary" hx-post="/bio" hx-include="#bio" hx-target="#person"
+                hx-swap="innerHTML">Save Bio</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="mb-4">
-      <label class="form-label"></label>
-      <div class="d-flex align-items-center">
-        <span class="me-2" style="width: 100px;">Problem Solving</span>
-        <input type="range" class="form-range flex-grow-1 mx-2" min="1" max="5" step="1" name="q2">
-        <span class="ms-2" style="width: 100px;">Absolutely!</span>
-      </div>
-    </div>
-    <div class="mb-4">
-      <label class="form-label">Being Outgoing</label>
-      <div class="d-flex align-items-center">
-        <span class="me-2" style="width: 100px;">Not So Much</span>
-        <input type="range" class="form-range flex-grow-1 mx-2" min="1" max="5" step="1" name="q3">
-        <span class="ms-2" style="width: 100px;">Absolutely!</span>
-      </div>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit These</button>
-  </form>
+</div>
+<script>
+  document.getElementById('bio').addEventListener('input', function () {
+    const max = 250;
+    const len = this.value.length;
+    document.getElementById('bio-char-count').textContent = (max - len) + ' characters left';
+  });
+</script>
+<div class="mb-4">
+  <label class="form-label">Speaking With Clients</label>
+  <div class="d-flex align-items-center">
+    <span class="me-2" style="width: 100px;">Not So Much</span>
+    <input type="range" class="form-range flex-grow-1 mx-2" min="1" max="5" step="1" name="q1">
+    <span class="ms-2" style="width: 100px;">Absolutely!</span>
+  </div>
+</div>
+<div class="mb-4">
+  <label class="form-label"></label>
+  <div class="d-flex align-items-center">
+    <span class="me-2" style="width: 100px;">Problem Solving</span>
+    <input type="range" class="form-range flex-grow-1 mx-2" min="1" max="5" step="1" name="q2">
+    <span class="ms-2" style="width: 100px;">Absolutely!</span>
+  </div>
+</div>
+<div class="mb-4">
+  <label class="form-label">Being Outgoing</label>
+  <div class="d-flex align-items-center">
+    <span class="me-2" style="width: 100px;">Not So Much</span>
+    <input type="range" class="form-range flex-grow-1 mx-2" min="1" max="5" step="1" name="q3">
+    <span class="ms-2" style="width: 100px;">Absolutely!</span>
+  </div>
+</div>
+<button type="submit" class="btn btn-primary">Submit These</button>
+</form>
 </div>
 <div class="container mt-4">
   <h4>Additional Reflections Of You</h4>
   <div id="reflections-list">
     {{ range .Employee.Reflections }}
-      <div class="row align-items-center mb-2" id="reflection-{{ .ID }}">
-        <div class="col">
-          <input type="text" class="form-control" value="{{ .Key }}" readonly>
-        </div>
-        <div class="col">
-          <input type="text" class="form-control" value="{{ .Value }}" readonly>
-        </div>
-        <div class="col-auto">
-            <button 
-            class="btn btn-danger btn-sm"
-            hx-delete="/reflection/{{ .ID }}"
-            hx-target="#person"
-            hx-swap="innerHTML"
-            aria-label="Delete Reflection"
-            title="Delete Reflection"
-          >&#10005;</button>
-        </div>
+    <div class="row align-items-center mb-2" id="reflection-{{ .ID }}">
+      <div class="col">
+        <input type="text" class="form-control" value="{{ .Key }}" readonly>
       </div>
+      <div class="col">
+        <input type="text" class="form-control" value="{{ .Value }}" readonly>
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-danger btn-sm" hx-delete="/reflection/{{ .ID }}" hx-target="#person" hx-swap="innerHTML"
+          aria-label="Delete Reflection" title="Delete Reflection">&#10005;</button>
+      </div>
+    </div>
     {{ end }}
     <div class="row align-items-center mb-2" name="reflectionForm">
       <div class="col">
-        <input type="text" class="form-control" id="new-reflection-name" name="new-reflection-name" placeholder="Reflection Name (ex. Favorite Color)">
+        <input type="text" class="form-control" id="new-reflection-name" name="new-reflection-name"
+          placeholder="Reflection Name (ex. Favorite Color)">
       </div>
       <div class="col">
-        <input type="text" class="form-control" id="new-reflection-value" name="new-reflection-value" placeholder="Reflection Value (ex. Blue)">
+        <input type="text" class="form-control" id="new-reflection-value" name="new-reflection-value"
+          placeholder="Reflection Value (ex. Blue)">
       </div>
       <div class="col-auto">
-        <button 
-          class="btn btn-success btn-sm"
-          hx-post="/reflection"
-          hx-include="[name='reflectionForm']"
-          hx-target="#person"
-          hx-swap="innerHTML"
-          aria-label="Add New Reflection"
-          title="Add New Reflection"
-        >Add New Reflection</button>
+        <button class="btn btn-success btn-sm" hx-post="/reflection" hx-include="[name='reflectionForm']"
+          hx-target="#person" hx-swap="innerHTML" aria-label="Add New Reflection" title="Add New Reflection">Add New
+          Reflection</button>
       </div>
     </div>
   </div>
 </div>
 <script>
-document.getElementById('knowyou-form').addEventListener('submit', function(e) {
-  e.preventDefault();
-  alert('Not Yet Implemented - Thank You For Looking!');
-});
+  document.getElementById('knowyou-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    alert('Not Yet Implemented - Thank You For Looking!');
+  });
 </script>
 
 {{ end }}

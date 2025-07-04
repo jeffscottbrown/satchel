@@ -48,6 +48,15 @@ func GetEmployeeByEmail(email string) (*model.Employee, error) {
 	return &employee, nil
 }
 
+func SaveBio(email string, bio string) error {
+	employee, err := GetEmployeeByEmail(email)
+	if err != nil {
+		return err
+	}
+	employee.Bio = bio
+	return SaveEmployee(employee)
+}
+
 func DeleteReflection(email string, reflectionId uint) error {
 	employee, err := GetEmployeeByEmail(email)
 	if err != nil {

@@ -5,6 +5,21 @@
     <h2 class="employee-name">{{ .Employee.Name }}</h2>
     <p class="employee-position">{{ .Employee.Position }}</p>
   </div>
+  <div class="card-bio">
+    <div class="bio-text">
+      {{ if .Employee.Bio }}
+      <p>{{ .Employee.Bio }}</p>
+      {{ else }}
+      <p class="text-muted">No bio available.</p>
+      {{ end }}
+    </div>
+
+
+    <div id="knowyou-form" class="mt-3">
+      <!-- This will be replaced with the know you form when the button is clicked -->
+  </div>
+
+  </div>
   <div class="card-stats">
 
     <table class="table table-striped">
