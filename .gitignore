@@ -2,6 +2,7 @@
 .vscode/
 tmp/
 
+coverage.html
 coverage.out
 reports/
 scripts/
