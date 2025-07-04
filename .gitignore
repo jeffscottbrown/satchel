@@ -1,2 +1,8 @@
+.env
 .vscode/
 tmp/
+
+coverage.out
+reports/
+scripts/
+
