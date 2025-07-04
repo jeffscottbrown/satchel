@@ -7,6 +7,8 @@ import (
 type Employee struct {
 	ID          uint `gorm:"primaryKey"`
 	Name        string
+	FirstName   string
+	LastName    string
 	Position    string
 	Reflections []Reflection `gorm:"constraint:OnDelete:CASCADE;foreignKey:EmployeeID"`
 	ImageName   string

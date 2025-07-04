@@ -71,7 +71,7 @@ func (r *gormEmployeeDb) GetEmployeeByEmail(email string) (model.Employee, error
 // GetEmployees implements repository.EmployeeRepository.
 func (r *gormEmployeeDb) GetEmployees() ([]model.Employee, error) {
 	var employees []model.Employee
-	err := r.db.WithContext(context.Background()).Find(&employees).Error
+	err := r.db.WithContext(context.Background()).Order("last_name").Order("first_name").Find(&employees).Error
 	if err != nil {
 		return nil, err
 	}

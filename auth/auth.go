@@ -72,6 +72,8 @@ func authCallback(c *gin.Context) {
 				Name:      user.Name,
 				Email:     user.Email,
 				ImageName: user.AvatarURL,
+				FirstName: user.FirstName,
+				LastName:  user.LastName,
 			}
 			newEmployee.AddReflection("Temporary Thing #1", "1")
 			newEmployee.AddReflection("Temporary Thing #2", "2")
