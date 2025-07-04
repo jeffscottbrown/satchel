@@ -131,6 +131,49 @@ func TestSaveBio(t *testing.T) {
 	assert.Equal(t, "Some New Bio", emp.Bio)
 }
 
+func TestUpdatingReflections(t *testing.T) {
+	email := "someone@someplace.com"
+	t.Cleanup(func() {
+		err := DeleteEmployee(email)
+		assert.NoError(t, err)
+	})
+	SaveEmployee(&model.Employee{
+		Email: email,
+	})
+	emp, err := GetEmployeeByEmail(email)
+	assert.NoError(t, err)
+	assert.NotNil(t, emp)
+	assert.Empty(t, emp.Reflections)
+
+	AddReflection(email, "Favorite Band", "Grateful Dead")
+	AddReflection(email, "Home", "Here")
+
+	assert.NoError(t, err)
+
+	emp, err = GetEmployeeByEmail(email)
+	assert.NoError(t, err)
+	assert.NotNil(t, emp)
+	assert.Len(t, emp.Reflections, 2)
+
+	var homeReflectionID uint
+	for _, r := range emp.Reflections {
+		if r.Key == "Home" {
+			homeReflectionID = r.ID
+			break
+		}
+	}
+
+	err = DeleteReflection(email, homeReflectionID)
+	assert.NoError(t, err)
+
+	emp, err = GetEmployeeByEmail(email)
+	assert.NoError(t, err)
+	assert.NotNil(t, emp)
+	assert.Len(t, emp.Reflections, 1)
+	assert.Equal(t, "Favorite Band", emp.Reflections[0].Key)
+
+}
+
 func TestMain(m *testing.M) {
 	RunTestsWithTestContainer(m)
 }

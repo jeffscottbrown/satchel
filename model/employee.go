@@ -8,7 +8,7 @@ type Employee struct {
 	ID          uint `gorm:"primaryKey"`
 	Name        string
 	Position    string
-	Reflections []Reflection `gorm:"foreignKey:EmployeeID"`
+	Reflections []Reflection `gorm:"constraint:OnDelete:CASCADE;foreignKey:EmployeeID"`
 	ImageName   string
 	Email       string `gorm:"uniqueIndex;not null"`
 	Bio         string
