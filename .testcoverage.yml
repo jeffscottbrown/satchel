@@ -44,8 +44,9 @@ exclude:
     - \.pb\.go$    # excludes all protobuf generated files
     - ^pkg/bar     # exclude package `pkg/bar`
     - ^pkg/baz     # exclude package `pkg/baz`
-    - auth\.go$    # exclude all files in `auth` package
+    - ^auth/      # exclude all files in `db` package
     - ^db/      # exclude all files in `db` package
+    - ^server/      # exclude all files in `db` package
     
 # File name of go-test-coverage breakdown file, which can be used to 
 # analyze coverage difference.
